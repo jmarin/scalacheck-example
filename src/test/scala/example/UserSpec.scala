@@ -71,7 +71,6 @@ class UserSpec extends PropSpec with PropertyChecks with Matchers {
 
   property("Generated users must be valid") {
     forAll(userGen) { user =>
-      println(user)
       userFirstNames.contains(user.firstName) shouldBe true
       userLastNames.contains(user.lastName) shouldBe true
       validate(user.phoneNumber, phoneRegEx) shouldBe true
