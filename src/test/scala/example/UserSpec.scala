@@ -4,6 +4,10 @@ import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Gen
 import RegExUtil._
 import Generators._
+import io.circe._
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
 
 class UserSpec extends PropSpec with PropertyChecks with Matchers {
 
@@ -75,6 +79,12 @@ class UserSpec extends PropSpec with PropertyChecks with Matchers {
       userLastNames.contains(user.lastName) shouldBe true
       validate(user.phoneNumber, phoneRegEx) shouldBe true
       validate(user.email, emailRegEx) shouldBe true
+    }
+  }
+
+  property("Generated user must encode to and from JSON") {
+    forAll(userGen) { user =>
+      decode[User](user.asJson.noSpaces) shouldBe Right(user)
     }
   }
 
